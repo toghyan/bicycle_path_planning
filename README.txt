@@ -4,6 +4,8 @@ run_simulation method runs the main loop of the simulation, and it is called in 
 Instances of Bicycle_sim are initialized using the initial conditions in the initial.txt file included 
 in the package. The initial conditions can be changed to best fit the desired conditions. The variables 
 are stored in a vectors and the values at the instant of current time are also stored for simplicity.
+The simulation runs with a 50 Hz frequency. To calculate the next value of each variable, a rectangle 
+(linear) approximation is used.
 
 User input:
 
@@ -26,7 +28,7 @@ Saved file:
 	saved files have the format of "log_simXXXX.txt", where "XXXX"
 	represents the counter for the log files. It stores values
 	from the last time 's' was pressed or the last 10 seconds, 
-	whichever is smaller. Each line of the log files have the 
+	whichever is smaller. Each line of the log files contains the 
 	following information:
 
 	timestamp in seconds
@@ -36,6 +38,8 @@ Saved file:
 	steering angle in radians
 	velocity of the bicylce in meters per second
 	rate of change of the steering angle in radians per second
+
+	These are comma seperated.
 
 ncurses library:
 	

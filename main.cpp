@@ -1,7 +1,7 @@
 /*
  * This file contains the main method to run the overall program.
  *
- * Authoroghyan
+ * Author : Aliakbar Toghyan
  */
 #include "Bicycle_sim.h"
 

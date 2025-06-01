@@ -1,0 +1,12 @@
+# Enable bzlmod
+common --enable_bzlmod
+
+# Test options
+test --test_output=errors
+
+# Python options
+build --action_env=PYTHONPATH
+build --python_path=python3
+
+# Performance options
+build --jobs=auto

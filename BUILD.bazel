@@ -1,0 +1,44 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@bicycle_pip_deps//:requirements.bzl", "requirement")
+
+
+py_library(
+    name = "bicycle_sim",
+    srcs = ["bicycle_sim.py"],
+    deps = [
+        requirement("numpy"),
+    ],
+    visibility = ["//visibility:public"],
+)
+
+py_library(
+    name = "bicycle_animator",
+    srcs = ["bicycle_animator.py"],
+    deps = [
+        requirement("numpy"),
+        requirement("matplotlib"),
+    ],
+    visibility = ["//visibility:public"],
+)
+
+py_library(
+    name = "bicycle_controller",
+    srcs = ["bicycle_controller.py"],
+    deps = [
+        requirement("numpy"),
+    ],
+    visibility = ["//visibility:public"],
+)
+
+py_binary(
+    name = "run_simulation",
+    srcs = ["run_simulation.py"],
+    deps = [
+        ":bicycle_animator",
+        ":bicycle_sim",
+        ":bicycle_controller",
+        requirement("matplotlib"),
+    ],
+    python_version = "PY3",
+    visibility = ["//visibility:public"],
+)

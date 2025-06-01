@@ -1,0 +1,23 @@
+module(
+    name = "bicycle_path_planning",
+    version = "0.1.0",
+)
+
+# Python rules
+bazel_dep(name = "rules_python", version = "0.40.0")
+
+# Python toolchain
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.13",
+)
+use_repo(python, "python_3_13")
+
+# Pip dependencies
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "bicycle_pip_deps",
+    python_version = "3.13",
+    requirements_lock = "//:requirements_lock.txt",
+)
+use_repo(pip, "bicycle_pip_deps")

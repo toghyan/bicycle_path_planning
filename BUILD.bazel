@@ -15,7 +15,7 @@ py_library(
     name = "bicycle_animator",
     srcs = ["bicycle_animator.py"],
     deps = [
-        requirement("numpy"),
+        ":target",
         requirement("matplotlib"),
     ],
     visibility = ["//visibility:public"],
@@ -24,6 +24,16 @@ py_library(
 py_library(
     name = "bicycle_controller",
     srcs = ["bicycle_controller.py"],
+    deps = [
+        ":target",
+        requirement("numpy"),
+    ],
+    visibility = ["//visibility:public"],
+)
+
+py_library(
+    name = "target",
+    srcs = ["target.py"],
     deps = [
         requirement("numpy"),
     ],
@@ -37,6 +47,7 @@ py_binary(
         ":bicycle_animator",
         ":bicycle_sim",
         ":bicycle_controller",
+        ":target",
         requirement("matplotlib"),
     ],
     python_version = "PY3",

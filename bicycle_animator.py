@@ -1,10 +1,11 @@
 import matplotlib.patches as patches
-import numpy as np
+from target import CircleTarget
+
 
 class BicycleAnimator:
     """Handles animation and visualization of bicycle simulation."""
     
-    def __init__(self, sim, controller, target, fig, ax1, ax2):
+    def __init__(self, sim, controller, target: CircleTarget, fig, ax1, ax2):
         self.sim = sim
         self.controller = controller
         self.target = target
@@ -29,7 +30,7 @@ class BicycleAnimator:
         """Initialize all plot elements."""
         # Add target circle
         self.target_circle = patches.Circle(
-            self.target['center'], self.target['radius'], 
+            self.target.center, self.target.radius, 
             fill=False, edgecolor='purple', linewidth=2, 
             linestyle='--', label='Target'
         )
@@ -37,7 +38,7 @@ class BicycleAnimator:
         
         # Add filled circle to show target area
         self.target_fill = patches.Circle(
-            self.target['center'], self.target['radius'], 
+            self.target.center, self.target.radius, 
             fill=True, facecolor='purple', alpha=0.2
         )
         self.ax1.add_patch(self.target_fill)
@@ -86,15 +87,14 @@ class BicycleAnimator:
         
         # Calculate distance to target
         x, y = self.sim.state[0], self.sim.state[1]
-        target_x, target_y = self.target['center']
-        distance_to_target = np.sqrt((x - target_x)**2 + (y - target_y)**2)
+        distance_to_target = self.target.distance_to_point(x, y)
         
         # Update distance text
-        status = "Inside target!" if distance_to_target <= self.target['radius'] else f"Distance: {distance_to_target:.2f}m"
+        status = "Inside target!" if self.target.contains_point(x, y) else f"Distance: {distance_to_target:.2f}m"
         self.distance_text.set_text(status)
         
         # Check if we've reached the target and stayed there
-        if distance_to_target <= self.target['radius'] and self.sim.state[3] < 0.1:
+        if self.target.contains_point(x, y) and self.sim.state[3] < 0.1:
             self.simulation_complete = True
             self.distance_text.set_text(f"Target reached! Final distance: {distance_to_target:.2f}m")
         

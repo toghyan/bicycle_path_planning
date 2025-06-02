@@ -4,39 +4,36 @@ import matplotlib.animation as animation
 from bicycle_animator import BicycleAnimator
 from bicycle_sim import BicycleSimulation
 from bicycle_controller import SimpleTargetController
+from target import CircleTarget
 
 
 def main():
     # Create simulation and controller
     sim = BicycleSimulation()
-    controller = SimpleTargetController(max_acceleration=2.0, max_steering_rate=1.0)
+    controller = SimpleTargetController(max_acceleration=2.0, max_steering_rate=1.0, dt=0.1)
     
-    # Define target circle
-    target = {
-        'center': (10.0, 8.0),
-        'radius': 2.0
-    }
+    # Define default target
+    target = CircleTarget(center=(10.0, 8.0), radius=2.0)
     
     # Allow user to customize target
     try:
-        print("Default target: center=(10.0, 8.0), radius=2.0")
+        print(f"Default target: {target}")
         user_input = input("Enter target as 'x,y,radius' or press Enter for default: ").strip()
         if user_input:
-            x, y, r = map(float, user_input.split(','))
-            target = {'center': (x, y), 'radius': r}
-            print(f"Target set to: center=({x}, {y}), radius={r}")
-    except ValueError:
-        print("Invalid input. Using default target.")
+            target = CircleTarget.from_string(user_input)
+            print(f"Target set to: {target}")
+    except ValueError as e:
+        print(f"Invalid input: {e}. Using default target.")
 
     # Set up the figure and axes
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
 
     # Configure main simulation plot
     view_margin = 5
-    min_x = min(0, target['center'][0] - target['radius']) - view_margin
-    max_x = max(0, target['center'][0] + target['radius']) + view_margin
-    min_y = min(0, target['center'][1] - target['radius']) - view_margin
-    max_y = max(0, target['center'][1] + target['radius']) + view_margin
+    min_x = min(0, target.x - target.radius) - view_margin
+    max_x = max(0, target.x + target.radius) + view_margin
+    min_y = min(0, target.y - target.radius) - view_margin
+    max_y = max(0, target.y + target.radius) + view_margin
     
     ax1.set_xlim(min_x, max_x)
     ax1.set_ylim(min_y, max_y)
@@ -63,10 +60,7 @@ def main():
     )
 
     # Add title with controller info
-    fig.suptitle(
-        f'Bicycle Target Navigation - Target: center=({target["center"][0]}, '
-        f'{target["center"][1]}), radius={target["radius"]}'
-    )
+    fig.suptitle(f'Bicycle Target Navigation - {target}')
 
     plt.tight_layout()
     plt.show()
